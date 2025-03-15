@@ -1,0 +1,122 @@
+package api_handlers;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import chat.write_to_chat;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+public class api_requester {
+
+    private static final String API_KEY = "93ed7863-504f-4c1a-b6f7-a2b87aa66fde"; // Buraya kendi API anahtarınızı ekleyin
+    public static String item_name;
+    public static String item_UUID;
+    public static long Starting_Bid;
+    public static List<String> args = new ArrayList<>();
+    public static List<String> flip_names = new ArrayList<>();
+
+    public static void get_items(String api_key) {
+        try {
+            String urlString = "https://api.hypixel.net/skyblock/auctions?key=" + api_key;
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+
+                // JSON verisini parse et
+                JsonParser jsonParser = new JsonParser();
+                JsonObject jsonObject = jsonParser.parse(response.toString()).getAsJsonObject();
+                JsonArray auctionsArray = jsonObject.getAsJsonArray("auctions");
+                // Müzayedeleri işle
+
+                for (int i = 0; i < auctionsArray.size(); i++) {
+                    JsonObject auction = auctionsArray.get(i).getAsJsonObject();
+                    String itemName = auction.get("item_name").getAsString();
+                    item_name = itemName;
+                    flip_names.add(itemName);
+                    long startingBid = auction.get("starting_bid").getAsLong();
+                    Starting_Bid = startingBid;
+                    String uuid = auction.get("uuid").getAsString();
+                    item_UUID = uuid;
+                    System.out.println("Item Name: " + itemName);
+                    System.out.println("Starting Bid: " + startingBid);
+                    System.out.println("UUID: " + uuid);
+                    // Enchants bilgilerini al
+                    if (auction.has("item_lore")) {
+                        JsonElement itemLoreElement = auction.get("item_lore");
+                        if (itemLoreElement.isJsonArray()) {
+                            JsonArray itemLore = itemLoreElement.getAsJsonArray();
+                            System.out.println("Item Lore:");
+                            for (int j = 0; j < itemLore.size(); j++) {
+                                String loreLine = itemLore.get(j).getAsString();
+                                // Renk ve stil kodlarını temizle
+                                String cleanedLoreLine = removeMinecraftFormatting(loreLine);
+                                System.out.println("  " + cleanedLoreLine);
+                            }
+                        } else if (itemLoreElement.isJsonPrimitive()) {
+                            // Eğer item_lore bir string ise
+                            String loreLine = itemLoreElement.getAsString();
+                            // Renk ve stil kodlarını temizle
+                            String cleanedLoreLine = removeMinecraftFormatting(loreLine);
+                            System.out.println("Item Lore (String): " + cleanedLoreLine);
+                        } else {
+                            System.out.println("Item lore is neither array nor string.");
+                        }
+                    } else {
+                        System.out.println("No item_lore found.");
+                    }
+
+                    System.out.println("--------------------------");
+                }
+            } else {
+                System.out.println("GET request failed: " + responseCode);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Minecraft format kodlarını temizlemek için yardımcı yöntem
+    private static String removeMinecraftFormatting(String input) {
+        // § karakteri ve ardındaki bir karakteri temizleyen düzenli ifade
+        return input.replaceAll("\u00A7.", "");
+    }
+    public static String getItem_name(){
+        get_items(API_KEY);
+        return item_name;
+    }
+    public static String getItem_UUID(){
+        get_items(API_KEY);
+        return item_UUID;
+    }
+    public static long getStarting_Bid(){
+        get_items(API_KEY);
+        return Starting_Bid;
+    }
+    public static void WriteFlips(){
+        get_items(API_KEY);
+        for (int i = 0; i < flip_names.size(); i++) {
+            args.add("item_name");
+            args.add(flip_names.get(i));
+            args.add("--------------------------");
+        }
+        write_to_chat.write(args);
+    }
+}
