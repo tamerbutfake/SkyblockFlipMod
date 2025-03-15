@@ -1,7 +1,0 @@
-hypixel api si ile son N dakika içinde oluşturulmuş auctionlar elde edilecek(N i ihtiyaca göre ayarla):https://api.hypixel.net/#tag/SkyBlock/paths/~1v2~1skyblock~1auctions/get
-Elde edilen auction'lar filtrelenecek.
-Filtreden sonra (karara bağlı olarak raw craft cost üzerinden de gidilebilir) her itemi kendi türünden olanlarla,
-(yıldız sayısı, reforge, büyüler vs. dikkate alınarak. kurallar klasörüne bakınız) profit bakımından karşılaştırıp eğer makulse ve kullanıcının şartlarına uyuyorsa listeye ekle.
-Listeye, listeye eklenen fliplerin uuidsini ve item adını da ekle.
-Listeyi chat te göster.
-üzerine tıklanınca uuid yi direk komut olarak çalıştırsın ve auctionu kullanıcıya göstersin.
