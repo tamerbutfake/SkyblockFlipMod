@@ -1,7 +1,7 @@
-package api_handlers;
+package event_handlers;
 
-
-import attribute_finder.enchant_finder;
+import api_handlers.api_request;
+import attribute_finder.all_handler;
 import filters.*;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -28,6 +28,6 @@ public class EventHandler {
         System.out.println("item_bytes");
         //byte[] decodedBytes = Base64.getDecoder().decode(filterer.item_bytes);
         //System.out.println(CompressedStreamTools.readCompressed(new ByteArrayInputStream(decodedBytes)));
-        enchant_finder.find_enchant(filterer.item_bytes);
+
     }
 }
