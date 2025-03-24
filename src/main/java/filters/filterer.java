@@ -9,7 +9,7 @@ import java.util.Objects;
 //all possible item types [armor, misc, accessories, weapon, consumables, blocks]
 //TODO:might add more filtering options and a way of getting them from the user
 public class filterer {
-    private static JsonArray filtered_result;
+    public static JsonArray filtered_result;
 
     public static void  filter(JsonObject object){
         JsonArray array = new JsonArray();

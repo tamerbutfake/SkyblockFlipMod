@@ -1,16 +1,9 @@
 package event_handlers;
 
-import api_handlers.api_request;
-import attribute_finder.all_handler;
+import api_handlers.auction_request;
 import filters.*;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Base64;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -23,8 +16,8 @@ public class EventHandler {
         MinecraftForge.EVENT_BUS.register(this);
     }
     @SubscribeEvent
-    public void onBlockBreak(BlockEvent.BreakEvent event) throws IOException {
-        filterer.getFiltered_result(api_request.get_request());
+    public void onBlockBreak(BlockEvent.BreakEvent event) throws Exception {
+        filterer.getFiltered_result(auction_request.get_request());
         System.out.println("item_bytes");
         //byte[] decodedBytes = Base64.getDecoder().decode(filterer.item_bytes);
         //System.out.println(CompressedStreamTools.readCompressed(new ByteArrayInputStream(decodedBytes)));
