@@ -20,5 +20,6 @@ public class find_lbin{
 
         //sort them by cost
         Collections.sort(AllItems, Comparator.comparingInt(i -> i.cost));
+        return 0;
     }
 }

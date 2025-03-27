@@ -1,6 +1,7 @@
 package event_handlers;
 
 import api_handlers.auction_request;
+import api_handlers.bazaar_request;
 import filters.*;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -17,10 +18,13 @@ public class EventHandler {
     }
     @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) throws Exception {
+
         filterer.getFiltered_result(auction_request.get_request());
-        System.out.println("item_bytes");
+
         //byte[] decodedBytes = Base64.getDecoder().decode(filterer.item_bytes);
         //System.out.println(CompressedStreamTools.readCompressed(new ByteArrayInputStream(decodedBytes)));
+
+        //System.out.println(bazaar_request.get_bz_info());
 
     }
 }
