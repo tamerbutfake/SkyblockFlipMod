@@ -1,6 +1,7 @@
 package attribute_finder;
 
 import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 import org.omg.CORBA.PUBLIC_MEMBER;
@@ -26,12 +27,16 @@ public class extract_item_bytes {
             NBTTagCompound nbt = CompressedStreamTools.readCompressed(new ByteArrayInputStream(decodedBytes));
 
             //extract ExtraAttributes
-            if(!nbt.hasKey("ExtraAttributes")){
-                //pass if it doesnt has ExtraAttributes
+            try{
+                return nbt.getTagList("i", Constants.NBT.TAG_COMPOUND)  // "i" is a list of compounds
+                        .getCompoundTagAt(0)                          // First item in the list
+                        .getCompoundTag("tag")                        // Item's NBT tag
+                        .getCompoundTag("ExtraAttributes");
+            }
+            catch (Exception e){
                 return null;
             }
 
-            return nbt.getCompoundTag("ExtraAttributes");
         }
         catch (IOException e){
             return  null;

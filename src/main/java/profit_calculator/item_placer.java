@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import java.util.*;
 
 public class item_placer {
-    public List<item> get_all_items(JsonObject object){
+    public static List<item> get_all_items(JsonObject object){
         List<item> ItemList = new ArrayList<>();
         JsonArray auctions = object.getAsJsonArray("auctions");
         for(JsonElement auction : auctions){

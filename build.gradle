@@ -60,7 +60,8 @@ minecraft {
 
 dependencies {
     compileOnly("de.tr7zw:item-nbt-api-plugin:2.9.0")
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.9'
+
 
     // you may put jars on which you depend on in ./libs
     // or you may define them like so..

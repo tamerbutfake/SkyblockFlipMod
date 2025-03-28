@@ -1,4 +1,6 @@
 package api_handlers;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
@@ -50,6 +52,7 @@ public class auction_request {
 
         HttpURLConnection auction_conn = (HttpURLConnection) url.openConnection();
         auction_conn.setRequestMethod("GET");
+        auction_conn.setRequestProperty("Connection", "Keep-Alive");
         auction_conn.connect();
 
         // Check the response
@@ -57,16 +60,16 @@ public class auction_request {
 
 
         // read info into buffer
-        StringBuilder s_builder = new StringBuilder();
-        Scanner scanner = new Scanner(url.openStream());
-        while (scanner.hasNext()) {
-            s_builder.append(scanner.nextLine());
+        BufferedReader reader = new BufferedReader(new InputStreamReader(auction_conn.getInputStream()));
+        StringBuilder response = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            response.append(line);
         }
-        scanner.close();
-
+        reader.close();
+        auction_conn.disconnect(); // Close the connection
         // parse the json object
-        JsonParser jsonParser = new JsonParser();
-        JsonObject responseObj = jsonParser.parse(s_builder.toString()).getAsJsonObject();
+        JsonObject responseObj = new JsonParser().parse(response.toString()).getAsJsonObject();
 
         // Check if the request was successfull
         if (!responseObj.get("success").getAsBoolean()) {
